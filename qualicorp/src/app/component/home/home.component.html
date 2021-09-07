@@ -1,3 +1,16 @@
-<div>
-
+<div class="formulario">
+    <div class="header">
+        <h2>Olá, seja bem vindo!</h2>
+        <p>Vamos te ajudar a encontrar um plano de saúde que melhor atenda você, fazendo algumas perguntas. É rapidinho. ;)</p>
+    </div>
+    <div class="body">
+        <div>
+            <mat-form-field appearance="standard">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="pat@example.com" [formControl]="email" required>
+                <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+                <mat-hint>Vamos utilizar essa informação de e-mail para que receba a sua cotação.</mat-hint>
+            </mat-form-field>
+        </div>
+    </div>
 </div>

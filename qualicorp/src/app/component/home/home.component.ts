@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ApiService} from "../../services/api-service.service";
 
 @Component({
@@ -14,6 +14,8 @@ export class HomeComponent implements OnInit {
   planos = [];
   ufs = [];
   cidades = [];
+
+  email = new FormControl('', [Validators.required, Validators.email]);
 
 
   constructor(private formBuilder: FormBuilder,
@@ -66,4 +68,12 @@ export class HomeComponent implements OnInit {
               console.log(this.cidades);
           })
   }
+
+  getErrorMessage() {
+        if (this.email.hasError('required')) {
+            return 'You must enter a value';
+        }
+
+        return this.email.hasError('email') ? 'Not a valid email' : '';
+    }
 }
