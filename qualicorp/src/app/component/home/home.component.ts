@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
            });
   }
 
-  buscarPlanos(entidade: string, uf: string, cidade: string, datanascimento: [any]){
+  buscarPlanos(entidade: string, uf: string, cidade: string, datanascimento: any[]){
         this.apiService.getPlanos(entidade, uf, cidade, datanascimento)
             .subscribe((data:any) =>{
                 this.planos = data;

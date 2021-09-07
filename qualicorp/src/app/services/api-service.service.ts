@@ -17,12 +17,14 @@ export class ApiService {
     return this.http.get(`${environment.apiUrl}/entidades/${profissao}/${uf}/${cidade}`);
   }
 
-  getPlanos(entidade: string, uf: string, cidade: string, datanascimento: [any]){
-    const params = new HttpParams()
+  getPlanos(entidade: string, uf: string, cidade: string, datanascimento: any[]){
+    let params = new HttpParams()
         .set('entidade', entidade)
         .set('cidade', cidade)
-        .set('datanascimento', JSON.stringify(datanascimento))
         .set('uf', uf);
+    datanascimento.forEach(data =>{
+       params = params.append('datanascimento', data);
+    });
     return this.http.post(`${environment.apiUrl}/planos`, params);
   }
 
