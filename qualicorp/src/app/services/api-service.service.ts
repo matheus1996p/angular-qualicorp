@@ -28,4 +28,12 @@ export class ApiService {
     return this.http.post(`${environment.apiUrl}/planos`, params);
   }
 
+  getEstados(){
+    return this.http.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados');
+  }
+
+  getCidades(uf: number){
+    return this.http.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/distritos`);
+  }
+
 }

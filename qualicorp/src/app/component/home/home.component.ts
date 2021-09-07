@@ -12,15 +12,19 @@ export class HomeComponent implements OnInit {
   profissoes = [];
   entidades = [];
   planos = [];
+  ufs = [];
+  cidades = [];
 
 
   constructor(private formBuilder: FormBuilder,
               private apiService: ApiService) {}
 
   ngOnInit(): void {
-     this.buscarProfissoes('SP', 'SÃOPAULO');
-     this.buscarEntidades('Advogado', 'SP', 'SÃOPAULO');
-     this.buscarPlanos('CAASP', 'SP', 'SÃOPAULO', ['1987-09-16']);
+     // this.buscarProfissoes('SP', 'SÃOPAULO');
+     // this.buscarEntidades('Advogado', 'SP', 'SÃOPAULO');
+     // this.buscarPlanos('CAASP', 'SP', 'SÃOPAULO', ['1987-09-16']);
+      this.buscarEstados();
+      this.buscarCidades();
   }
 
   buscarProfissoes(uf: string, cidade: string) {
@@ -45,5 +49,21 @@ export class HomeComponent implements OnInit {
                 this.planos = data;
                 console.log(this.planos);
             })
+  }
+
+  buscarEstados(){
+      this.apiService.getEstados()
+          .subscribe((data:any) =>{
+              this.ufs = data;
+              console.log(this.ufs);
+          })
+  }
+
+  buscarCidades(){
+      this.apiService.getCidades(35)
+          .subscribe((data:any) =>{
+              this.cidades = data;
+              console.log(this.cidades);
+          })
   }
 }
