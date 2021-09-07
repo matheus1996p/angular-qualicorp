@@ -5,12 +5,70 @@
     </div>
     <div class="body">
         <div>
-            <mat-form-field appearance="standard">
-                <mat-label>Email</mat-label>
-                <input matInput placeholder="pat@example.com" [formControl]="email" required>
-                <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
-                <mat-hint>Vamos utilizar essa informação de e-mail para que receba a sua cotação.</mat-hint>
-            </mat-form-field>
+            <form method="post" (ngSubmit)="criar()" [formGroup]="formulario">
+                <mat-form-field appearance="standard">
+                    <mat-label>Nome</mat-label>
+                    <input matInput [formControl]="nome" required>
+                    <mat-error *ngIf="nome.invalid">{{getErrorMessageNome()}}</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="standard">
+                    <mat-label>Email</mat-label>
+                    <input matInput [formControl]="email" required>
+                    <mat-error *ngIf="email.invalid">{{getErrorMessageEmail()}}</mat-error>
+                    <mat-hint>Vamos utilizar essa informação de e-mail para que receba a sua cotação.</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="standard">
+                    <mat-label>Selecione seu estado</mat-label>
+                    <mat-select  [formControl]="estado">
+                        <mat-option *ngFor="let estado of ufs" [value]="estado">
+                            {{estado.nome}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="estado.invalid">{{getErrorMessageEstado()}}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="standard">
+                    <mat-label>Selecione sua cidade</mat-label>
+                    <mat-select [disabled]="estado.invalid">
+                        <mat-option *ngFor="let cidade of cidades" [value]="cidade">
+                            {{cidade.municipio.nome}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+<!--                <mat-form-field class="example-full-width" appearance="standard">-->
+<!--                    <mat-label>Digite seu estado</mat-label>-->
+<!--                    <input type="text"-->
+<!--                           placeholder="Digite seu estado"-->
+<!--                           matInput-->
+<!--                           [formControl]="estado"-->
+<!--                           [matAutocomplete]="auto">-->
+<!--                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">-->
+<!--                        <mat-option *ngFor="let option of filtroUfs | async" [value]="option">-->
+<!--                            {{option.nome}}-->
+<!--                        </mat-option>-->
+<!--                    </mat-autocomplete>-->
+<!--                    <mat-error *ngIf="estado.invalid">{{getErrorMessageEstado()}}</mat-error>-->
+<!--                </mat-form-field>-->
+<!--                <mat-form-field class="example-full-width" appearance="standard">-->
+<!--                    <mat-label>Digite sua cidade</mat-label>-->
+<!--                    <input type="text"-->
+<!--                           placeholder="Digite sua cidade"-->
+<!--                           matInput-->
+<!--                           [formControl]="cidade"-->
+<!--                           [matAutocomplete]="auto">-->
+<!--                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">-->
+<!--                        <mat-option *ngFor="let option of filtroCidades | async" [value]="option.nome">-->
+<!--                            {{option.municipio.nome}}-->
+<!--                        </mat-option>-->
+<!--                    </mat-autocomplete>-->
+<!--                    <mat-error *ngIf="email.invalid">{{getErrorMessageEstado()}}</mat-error>-->
+<!--                </mat-form-field>-->
+
+
+
+            </form>
         </div>
     </div>
 </div>

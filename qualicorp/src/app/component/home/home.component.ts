@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ApiService} from "../../services/api-service.service";
+import {Observable} from "rxjs";
+import {map, startWith} from "rxjs/operators";
 
 @Component({
   selector: 'app-home',
@@ -12,21 +14,30 @@ export class HomeComponent implements OnInit {
   profissoes = [];
   entidades = [];
   planos = [];
-  ufs = [];
-  cidades = [];
+  ufs: any[] = [];
+  cidades: any[] = [];
 
+  formulario: FormGroup;
   email = new FormControl('', [Validators.required, Validators.email]);
+  nome = new FormControl('', [Validators.required]);
+  estado = new FormControl('', [Validators.required]);
+  cidade = new FormControl('', [Validators.required]);
 
 
   constructor(private formBuilder: FormBuilder,
-              private apiService: ApiService) {}
+              private apiService: ApiService) {
+      this.formulario = this.formBuilder.group({
+          nome: this.nome,
+          email: this.email
+      });
+  }
 
   ngOnInit(): void {
-     // this.buscarProfissoes('SP', 'SÃOPAULO');
+      // this.buscarProfissoes('SP', 'SÃOPAULO');
      // this.buscarEntidades('Advogado', 'SP', 'SÃOPAULO');
      // this.buscarPlanos('CAASP', 'SP', 'SÃOPAULO', ['1987-09-16']);
       this.buscarEstados();
-      this.buscarCidades();
+      this.buscarCidades(35);
   }
 
   buscarProfissoes(uf: string, cidade: string) {
@@ -61,19 +72,36 @@ export class HomeComponent implements OnInit {
           })
   }
 
-  buscarCidades(){
-      this.apiService.getCidades(35)
+  buscarCidades(estado: any){
+      this.apiService.getCidades(estado)
           .subscribe((data:any) =>{
               this.cidades = data;
               console.log(this.cidades);
           })
   }
 
-  getErrorMessage() {
+  getErrorMessageEmail() {
         if (this.email.hasError('required')) {
-            return 'You must enter a value';
+            return 'O campo E-mail é obrigatório.';
         }
+        return this.email.hasError('email') ? 'O campo E-mail deve ser um email válido' : '';
+  }
 
-        return this.email.hasError('email') ? 'Not a valid email' : '';
-    }
+  getErrorMessageNome() {
+        return this.nome.hasError('required') ? 'O campo Nome é obrigatório.' : '';
+  }
+
+  getErrorMessageEstado() {
+        return this.estado.hasError('required') ? 'O campo Estado é obrigatório.' : '';
+  }
+
+  criar(){
+
+  }
+
+  private _filter(name: string): any[] {
+        const filterValue = name.toLowerCase();
+
+        return this.ufs.filter(option => option.nome.toLowerCase().includes(filterValue));
+  }
 }
