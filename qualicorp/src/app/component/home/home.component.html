@@ -17,57 +17,34 @@
                     <mat-error *ngIf="email.invalid">{{getErrorMessageEmail()}}</mat-error>
                     <mat-hint>Vamos utilizar essa informação de e-mail para que receba a sua cotação.</mat-hint>
                 </mat-form-field>
-
-                <mat-form-field appearance="standard">
-                    <mat-label>Selecione seu estado</mat-label>
-                    <mat-select  [formControl]="estado">
-                        <mat-option *ngFor="let estado of ufs" [value]="estado">
-                            {{estado.nome}}
+                <mat-form-field class="example-full-width" appearance="standard">
+                    <mat-label>Digite seu estado</mat-label>
+                    <input type="text"
+                           placeholder="Digite seu estado"
+                           matInput
+                           [formControl]="estado"
+                           [matAutocomplete]="auto">
+                    <mat-autocomplete (optionSelected)="selectedEstado($event)"  [displayWith]="displayFn" autoActiveFirstOption #auto="matAutocomplete">
+                        <mat-option *ngFor="let option of filtrosUfs | async" [value]="option">
+                            {{option.nome}}
                         </mat-option>
-                    </mat-select>
+                    </mat-autocomplete>
                     <mat-error *ngIf="estado.invalid">{{getErrorMessageEstado()}}</mat-error>
                 </mat-form-field>
-
-                <mat-form-field appearance="standard">
-                    <mat-label>Selecione sua cidade</mat-label>
-                    <mat-select [disabled]="estado.invalid">
-                        <mat-option *ngFor="let cidade of cidades" [value]="cidade">
-                            {{cidade.municipio.nome}}
+                <mat-form-field class="example-full-width" appearance="standard">
+                    <mat-label>Digite sua cidade</mat-label>
+                    <input type="text"
+                           placeholder="Digite sua cidade"
+                           matInput
+                           [formControl]="cidade"
+                           [matAutocomplete]="autoCidade">
+                    <mat-autocomplete (optionSelected)="selectedCidade($event)"  [displayWith]="displayFnCidade"  #autoCidade="matAutocomplete">
+                        <mat-option *ngFor="let opcao of filtroCidades | async" [value]="opcao">
+                            {{opcao.nome}}
                         </mat-option>
-                    </mat-select>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="cidade.invalid">{{getErrorMessageCidade()}}</mat-error>
                 </mat-form-field>
-
-<!--                <mat-form-field class="example-full-width" appearance="standard">-->
-<!--                    <mat-label>Digite seu estado</mat-label>-->
-<!--                    <input type="text"-->
-<!--                           placeholder="Digite seu estado"-->
-<!--                           matInput-->
-<!--                           [formControl]="estado"-->
-<!--                           [matAutocomplete]="auto">-->
-<!--                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">-->
-<!--                        <mat-option *ngFor="let option of filtroUfs | async" [value]="option">-->
-<!--                            {{option.nome}}-->
-<!--                        </mat-option>-->
-<!--                    </mat-autocomplete>-->
-<!--                    <mat-error *ngIf="estado.invalid">{{getErrorMessageEstado()}}</mat-error>-->
-<!--                </mat-form-field>-->
-<!--                <mat-form-field class="example-full-width" appearance="standard">-->
-<!--                    <mat-label>Digite sua cidade</mat-label>-->
-<!--                    <input type="text"-->
-<!--                           placeholder="Digite sua cidade"-->
-<!--                           matInput-->
-<!--                           [formControl]="cidade"-->
-<!--                           [matAutocomplete]="auto">-->
-<!--                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">-->
-<!--                        <mat-option *ngFor="let option of filtroCidades | async" [value]="option.nome">-->
-<!--                            {{option.municipio.nome}}-->
-<!--                        </mat-option>-->
-<!--                    </mat-autocomplete>-->
-<!--                    <mat-error *ngIf="email.invalid">{{getErrorMessageEstado()}}</mat-error>-->
-<!--                </mat-form-field>-->
-
-
-
             </form>
         </div>
     </div>

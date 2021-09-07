@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ApiService} from "../../services/api-service.service";
 import {Observable} from "rxjs";
@@ -23,21 +23,46 @@ export class HomeComponent implements OnInit {
   estado = new FormControl('', [Validators.required]);
   cidade = new FormControl('', [Validators.required]);
 
+  filtrosUfs!: Observable<any[]>;
+  filtroCidades!: Observable<any[]>;
+
 
   constructor(private formBuilder: FormBuilder,
               private apiService: ApiService) {
       this.formulario = this.formBuilder.group({
           nome: this.nome,
-          email: this.email
+          email: this.email,
+          estado: this.estado,
+          cidade: this.cidade
       });
   }
+
+  @ViewChild('estadoSearch') estadoSearch!: ElementRef;
 
   ngOnInit(): void {
       // this.buscarProfissoes('SP', 'SÃOPAULO');
      // this.buscarEntidades('Advogado', 'SP', 'SÃOPAULO');
      // this.buscarPlanos('CAASP', 'SP', 'SÃOPAULO', ['1987-09-16']);
       this.buscarEstados();
-      this.buscarCidades(35);
+      // this.buscarCidades(35);
+
+      this.filtrosUfs = this.estado.valueChanges
+          .pipe(
+              startWith(''),
+              map(value => typeof value === 'string' ? value : value.nome),
+              map(nome => nome ? this._filterEstado(nome) : this.ufs.slice())
+          );
+
+      this.filtroCidades = this.cidade.valueChanges
+          .pipe(
+              startWith(''),
+              map(value => typeof value === 'string' ? value : value.nome),
+              map(nome => nome ? this._filterCidade(nome) : this.cidades.slice())
+          );
+  }
+
+  onInputChange(){
+      console.log(this.estadoSearch.nativeElement.value);
   }
 
   buscarProfissoes(uf: string, cidade: string) {
@@ -95,13 +120,39 @@ export class HomeComponent implements OnInit {
         return this.estado.hasError('required') ? 'O campo Estado é obrigatório.' : '';
   }
 
+  getErrorMessageCidade() {
+        return this.estado.hasError('required') ? 'O campo Cidade é obrigatório.' : '';
+  }
+
   criar(){
 
   }
 
-  private _filter(name: string): any[] {
+  private _filterEstado(name: string): any[] {
         const filterValue = name.toLowerCase();
 
         return this.ufs.filter(option => option.nome.toLowerCase().includes(filterValue));
   }
+  private _filterCidade(name: string): any[] {
+        const filterValue = name.toLowerCase();
+
+        return this.cidades.filter(option => option.nome.toLowerCase().includes(filterValue));
+  }
+
+
+    selectedEstado(event: any) {
+        this.buscarCidades(event.option.value.id);
+    }
+
+    selectedCidade(event: any) {
+        console.log(event.option.value);
+    }
+
+    displayFn(estado: any): string {
+        return estado && estado.nome ? estado.nome : '';
+    }
+
+    displayFnCidade(cidade: any): string {
+        return cidade && cidade.nome ? cidade.nome : '';
+    }
 }
