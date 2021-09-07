@@ -43,6 +43,7 @@ export class HomeComponent implements OnInit {
       // this.buscarProfissoes('SP', 'SÃOPAULO');
      // this.buscarEntidades('Advogado', 'SP', 'SÃOPAULO');
      // this.buscarPlanos('CAASP', 'SP', 'SÃOPAULO', ['1987-09-16']);
+      this.cidade.disable();
       this.buscarEstados();
       // this.buscarCidades(35);
 
@@ -93,6 +94,9 @@ export class HomeComponent implements OnInit {
       this.apiService.getEstados()
           .subscribe((data:any) =>{
               this.ufs = data;
+              this.ufs.sort(function (a,b) {
+                  return a.nome < b.nome ? -1 : a.nome > b.nome ? 1 : 0;
+              });
               console.log(this.ufs);
           })
   }
@@ -101,6 +105,7 @@ export class HomeComponent implements OnInit {
       this.apiService.getCidades(estado)
           .subscribe((data:any) =>{
               this.cidades = data;
+              this.cidade.enable();
               console.log(this.cidades);
           })
   }
@@ -141,7 +146,9 @@ export class HomeComponent implements OnInit {
 
 
     selectedEstado(event: any) {
-        this.buscarCidades(event.option.value.id);
+      this.formulario.controls['cidade'].setValue('');
+      this.cidade.disable();
+      this.buscarCidades(event.option.value.id);
     }
 
     selectedCidade(event: any) {

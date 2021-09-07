@@ -33,7 +33,7 @@ export class ApiService {
   }
 
   getCidades(uf: number){
-    return this.http.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/distritos`);
+    return this.http.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`);
   }
 
 }
