@@ -22,6 +22,7 @@
                     <input type="text"
                            placeholder="Digite seu estado"
                            matInput
+                           (blur)="resetaCampos()"
                            [formControl]="estado"
                            [matAutocomplete]="auto">
                     <mat-autocomplete (optionSelected)="selectedEstado($event)"  [displayWith]="displayFn" autoActiveFirstOption #auto="matAutocomplete">

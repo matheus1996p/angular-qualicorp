@@ -110,6 +110,13 @@ export class HomeComponent implements OnInit {
           })
   }
 
+  resetaCampos(){
+      if(this.estado.hasError('required')){
+          this.cidade.setValue('');
+          this.cidade.disable();
+      }
+  }
+
   getErrorMessageEmail() {
         if (this.email.hasError('required')) {
             return 'O campo E-mail é obrigatório.';
@@ -135,7 +142,6 @@ export class HomeComponent implements OnInit {
 
   private _filterEstado(name: string): any[] {
         const filterValue = name.toLowerCase();
-
         return this.ufs.filter(option => option.nome.toLowerCase().includes(filterValue));
   }
   private _filterCidade(name: string): any[] {
