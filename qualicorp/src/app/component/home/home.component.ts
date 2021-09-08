@@ -30,7 +30,6 @@ export class HomeComponent implements OnInit {
   filtroProfissoes!: Observable<any[]>;
   filtroEntidades!: Observable<any[]>;
 
-
   constructor(private formBuilder: FormBuilder,
               private apiService: ApiService) {
       this.formulario = this.formBuilder.group({
@@ -49,6 +48,7 @@ export class HomeComponent implements OnInit {
      // this.buscarPlanos('CAASP', 'SP', 'SÃOPAULO', ['1987-09-16']);
       this.cidade.disable();
       this.profissao.disable();
+      this.entidade.disable();
       this.buscarEstados();
       // this.buscarCidades(35);
 
@@ -72,6 +72,13 @@ export class HomeComponent implements OnInit {
               map(value => typeof value === 'string' ? value : value.profissao),
               map(nome => nome ? this._filterProfissao(nome) : this.profissoes.slice())
           );
+
+      this.filtroEntidades = this.entidade.valueChanges
+          .pipe(
+              startWith(''),
+              map(value => typeof value === 'string' ? value : value.RazaoSocial),
+              map(nome => nome ? this._filterEntidade(nome) : this.entidades.slice())
+          );
   }
 
   buscarProfissoes(uf: string, cidade: string) {
@@ -87,6 +94,7 @@ export class HomeComponent implements OnInit {
        this.apiService.getEntidades(profissao, uf, cidade)
            .subscribe((data: any) =>{
               this.entidades = data;
+              this.entidade.enable();
               console.log(this.entidades);
            });
   }
@@ -130,6 +138,11 @@ export class HomeComponent implements OnInit {
           this.profissao.setValue('');
           this.profissao.disable();
       }
+      if(this.profissao.hasError('required')){
+          this.entidade.setValue('');
+          this.entidade.disable();
+      }
+
   }
 
   getErrorMessageEmail() {
@@ -155,6 +168,10 @@ export class HomeComponent implements OnInit {
         return this.profissao.hasError('required') ? 'O campo Profissão é obrigatório.' : '';
   }
 
+  getErrorMessageEntidade() {
+        return this.profissao.hasError('required') ? 'O campo Entidade é obrigatório.' : '';
+  }
+
   criar(){
 
   }
@@ -175,6 +192,12 @@ export class HomeComponent implements OnInit {
         return this.profissoes.filter(option => option.profissao.toLowerCase().includes(filterValue));
   }
 
+  private _filterEntidade(name: string): any[] {
+        const filterValue = name.toLowerCase();
+
+        return this.entidades.filter(option => option.RazaoSocial.toLowerCase().includes(filterValue));
+  }
+
 
     selectedEstado(event: any) {
       this.formulario.controls['cidade'].setValue('');
@@ -188,7 +211,14 @@ export class HomeComponent implements OnInit {
     }
 
     selectedProfissao(event: any) {
+      this.entidade.disable();
+      this.buscarEntidades(event.option.value.profissao, this.formulario.controls['estado'].value.sigla,
+          this.formulario.controls['cidade'].value.nome);
         console.log(event.option.value);
+    }
+
+    selectedEntidade(event: any) {
+      console.log(event.option.value);
     }
 
     displayFn(estado: any): string {
@@ -201,5 +231,9 @@ export class HomeComponent implements OnInit {
 
     displayFnProfissao(profissao: any): string {
         return profissao && profissao.profissao ? profissao.profissao : '';
+    }
+
+    displayFnEntidade(entidade: any): string {
+        return entidade && entidade.NomeFantasia ? entidade.NomeFantasia : '';
     }
 }

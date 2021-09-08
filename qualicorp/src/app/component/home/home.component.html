@@ -52,6 +52,7 @@
                     <input type="text"
                            placeholder="Digite sua profissao"
                            matInput
+                           (blur)="resetaCampos()"
                            [formControl]="profissao"
                            [matAutocomplete]="autoProfissao">
                     <mat-autocomplete (optionSelected)="selectedProfissao($event)"  [displayWith]="displayFnProfissao"  #autoProfissao="matAutocomplete">
@@ -59,7 +60,21 @@
                             {{opcao.profissao}}
                         </mat-option>
                     </mat-autocomplete>
-                    <mat-error *ngIf="profissao.invalid">{{getErrorMessageCidade()}}</mat-error>
+                    <mat-error *ngIf="profissao.invalid">{{getErrorMessageProfissao()}}</mat-error>
+                </mat-form-field>
+                <mat-form-field class="example-full-width" appearance="standard">
+                    <mat-label>Digite sua entidade</mat-label>
+                    <input type="text"
+                           placeholder="Digite sua entidade"
+                           matInput
+                           [formControl]="entidade"
+                           [matAutocomplete]="autoEntidade">
+                    <mat-autocomplete (optionSelected)="selectedEntidade($event)"  [displayWith]="displayFnEntidade"  #autoEntidade="matAutocomplete">
+                        <mat-option *ngFor="let opcao of filtroEntidades | async" [value]="opcao">
+                            {{opcao.NomeFantasia}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="entidade.invalid">{{getErrorMessageEntidade()}}</mat-error>
                 </mat-form-field>
             </form>
         </div>
