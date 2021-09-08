@@ -37,6 +37,7 @@
                     <input type="text"
                            placeholder="Digite sua cidade"
                            matInput
+                           (blur)="resetaCampos()"
                            [formControl]="cidade"
                            [matAutocomplete]="autoCidade">
                     <mat-autocomplete (optionSelected)="selectedCidade($event)"  [displayWith]="displayFnCidade"  #autoCidade="matAutocomplete">
@@ -45,6 +46,20 @@
                         </mat-option>
                     </mat-autocomplete>
                     <mat-error *ngIf="cidade.invalid">{{getErrorMessageCidade()}}</mat-error>
+                </mat-form-field>
+                <mat-form-field class="example-full-width" appearance="standard">
+                    <mat-label>Digite sua profissão</mat-label>
+                    <input type="text"
+                           placeholder="Digite sua profissao"
+                           matInput
+                           [formControl]="profissao"
+                           [matAutocomplete]="autoProfissao">
+                    <mat-autocomplete (optionSelected)="selectedProfissao($event)"  [displayWith]="displayFnProfissao"  #autoProfissao="matAutocomplete">
+                        <mat-option *ngFor="let opcao of filtroProfissoes | async" [value]="opcao">
+                            {{opcao.profissao}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="profissao.invalid">{{getErrorMessageCidade()}}</mat-error>
                 </mat-form-field>
             </form>
         </div>

@@ -11,9 +11,9 @@ import {map, startWith} from "rxjs/operators";
 })
 export class HomeComponent implements OnInit {
 
-  profissoes = [];
-  entidades = [];
-  planos = [];
+  profissoes: any[] = [];
+  entidades: any[] = [];
+  planos: any[] = [];
   ufs: any[] = [];
   cidades: any[] = [];
 
@@ -22,9 +22,13 @@ export class HomeComponent implements OnInit {
   nome = new FormControl('', [Validators.required]);
   estado = new FormControl('', [Validators.required]);
   cidade = new FormControl('', [Validators.required]);
+  profissao = new FormControl('', [Validators.required]);
+  entidade = new FormControl('', [Validators.required]);
 
   filtrosUfs!: Observable<any[]>;
   filtroCidades!: Observable<any[]>;
+  filtroProfissoes!: Observable<any[]>;
+  filtroEntidades!: Observable<any[]>;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -33,17 +37,18 @@ export class HomeComponent implements OnInit {
           nome: this.nome,
           email: this.email,
           estado: this.estado,
-          cidade: this.cidade
+          cidade: this.cidade,
+          profissao: this.profissao,
+          entidade: this.entidade
       });
   }
-
-  @ViewChild('estadoSearch') estadoSearch!: ElementRef;
 
   ngOnInit(): void {
       // this.buscarProfissoes('SP', 'SÃOPAULO');
      // this.buscarEntidades('Advogado', 'SP', 'SÃOPAULO');
      // this.buscarPlanos('CAASP', 'SP', 'SÃOPAULO', ['1987-09-16']);
       this.cidade.disable();
+      this.profissao.disable();
       this.buscarEstados();
       // this.buscarCidades(35);
 
@@ -60,16 +65,20 @@ export class HomeComponent implements OnInit {
               map(value => typeof value === 'string' ? value : value.nome),
               map(nome => nome ? this._filterCidade(nome) : this.cidades.slice())
           );
-  }
 
-  onInputChange(){
-      console.log(this.estadoSearch.nativeElement.value);
+      this.filtroProfissoes = this.profissao.valueChanges
+          .pipe(
+              startWith(''),
+              map(value => typeof value === 'string' ? value : value.profissao),
+              map(nome => nome ? this._filterProfissao(nome) : this.profissoes.slice())
+          );
   }
 
   buscarProfissoes(uf: string, cidade: string) {
       this.apiService.getProfissoes(uf, cidade)
           .subscribe((data: any) =>{
             this.profissoes = data;
+            this.profissao.enable();
             console.log(this.profissoes);
           })
   }
@@ -114,6 +123,12 @@ export class HomeComponent implements OnInit {
       if(this.estado.hasError('required')){
           this.cidade.setValue('');
           this.cidade.disable();
+          this.profissao.setValue('');
+          this.profissao.disable();
+      }
+      if(this.cidade.hasError('required')){
+          this.profissao.setValue('');
+          this.profissao.disable();
       }
   }
 
@@ -136,6 +151,10 @@ export class HomeComponent implements OnInit {
         return this.estado.hasError('required') ? 'O campo Cidade é obrigatório.' : '';
   }
 
+  getErrorMessageProfissao() {
+        return this.profissao.hasError('required') ? 'O campo Profissão é obrigatório.' : '';
+  }
+
   criar(){
 
   }
@@ -150,6 +169,12 @@ export class HomeComponent implements OnInit {
         return this.cidades.filter(option => option.nome.toLowerCase().includes(filterValue));
   }
 
+  private _filterProfissao(name: string): any[] {
+        const filterValue = name.toLowerCase();
+
+        return this.profissoes.filter(option => option.profissao.toLowerCase().includes(filterValue));
+  }
+
 
     selectedEstado(event: any) {
       this.formulario.controls['cidade'].setValue('');
@@ -158,6 +183,11 @@ export class HomeComponent implements OnInit {
     }
 
     selectedCidade(event: any) {
+        this.profissao.disable();
+        this.buscarProfissoes(this.formulario.controls['estado'].value.sigla, event.option.value.nome);
+    }
+
+    selectedProfissao(event: any) {
         console.log(event.option.value);
     }
 
@@ -167,5 +197,9 @@ export class HomeComponent implements OnInit {
 
     displayFnCidade(cidade: any): string {
         return cidade && cidade.nome ? cidade.nome : '';
+    }
+
+    displayFnProfissao(profissao: any): string {
+        return profissao && profissao.profissao ? profissao.profissao : '';
     }
 }
