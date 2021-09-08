@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ApiService} from "../../services/api-service.service";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
+// import {moment} from "ngx-bootstrap/chronos/testing/chain";
 
 @Component({
   selector: 'app-home',
@@ -24,6 +25,7 @@ export class HomeComponent implements OnInit {
   cidade = new FormControl('', [Validators.required]);
   profissao = new FormControl('', [Validators.required]);
   entidade = new FormControl('', [Validators.required]);
+  datanascimento = new FormControl('', [Validators.required, this.dateValidator]);
 
   filtrosUfs!: Observable<any[]>;
   filtroCidades!: Observable<any[]>;
@@ -38,7 +40,8 @@ export class HomeComponent implements OnInit {
           estado: this.estado,
           cidade: this.cidade,
           profissao: this.profissao,
-          entidade: this.entidade
+          entidade: this.entidade,
+          datanascimento: this.datanascimento
       });
   }
 
@@ -170,6 +173,17 @@ export class HomeComponent implements OnInit {
 
   getErrorMessageEntidade() {
         return this.profissao.hasError('required') ? 'O campo Entidade é obrigatório.' : '';
+  }
+
+  dateValidator(control: FormControl){
+      // if (control.value) {
+      //     const date = moment(control.value);
+      //     const today = moment();
+      //     if (date.isBefore(today)) {
+      //         return { 'invalidDate': true }
+      //     }
+      // }
+      return null;
   }
 
   criar(){
