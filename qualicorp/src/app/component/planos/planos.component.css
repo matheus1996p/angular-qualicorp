@@ -12,7 +12,8 @@
 }
 
 .plano-card {
-    max-width: 400px;
+    max-width: 350px;
+    min-height: 550px;
 }
 
 .example-header-image {
