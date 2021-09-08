@@ -9,6 +9,7 @@ import {Router} from "@angular/router";
 })
 export class PlanosComponent implements OnInit {
 
+  dataSimulacao = new Date();
   data = this.transfereService.getData();
 
   constructor(private transfereService:TransfereService,
