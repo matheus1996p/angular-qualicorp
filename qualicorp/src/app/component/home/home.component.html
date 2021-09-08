@@ -19,9 +19,10 @@
                 </mat-form-field>
                 <mat-form-field appearance="standard">
                     <mat-label>Data de Nascimento</mat-label>
-                    <input mask="d0/M0/0000" matInput [matDatepicker]="picker">
+                    <input [formControl]="datanascimento" matInput [matDatepicker]="picker">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="estado.invalid">{{getErrorMessageDate()}}</mat-error>
                 </mat-form-field>
                 <mat-form-field class="example-full-width" appearance="standard">
                     <mat-label>Digite seu estado</mat-label>

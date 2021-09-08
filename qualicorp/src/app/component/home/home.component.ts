@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ApiService} from "../../services/api-service.service";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
-// import {moment} from "ngx-bootstrap/chronos/testing/chain";
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-home',
@@ -175,14 +175,18 @@ export class HomeComponent implements OnInit {
         return this.profissao.hasError('required') ? 'O campo Entidade é obrigatório.' : '';
   }
 
+  getErrorMessageDate(){
+      return this.datanascimento.hasError('required') ? 'Informe um data válida.' : '';
+  }
+
   dateValidator(control: FormControl){
-      // if (control.value) {
-      //     const date = moment(control.value);
-      //     const today = moment();
-      //     if (date.isBefore(today)) {
-      //         return { 'invalidDate': true }
-      //     }
-      // }
+      if (control.value) {
+          const date = moment(control.value);
+          const today = moment();
+          if (!date.isValid()) {
+              return { 'invalidDate': true }
+          }
+      }
       return null;
   }
 
