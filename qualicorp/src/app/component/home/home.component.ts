@@ -32,6 +32,8 @@ export class HomeComponent implements OnInit {
   filtroProfissoes!: Observable<any[]>;
   filtroEntidades!: Observable<any[]>;
 
+  formValido: boolean = false;
+
   constructor(private formBuilder: FormBuilder,
               private apiService: ApiService) {
       this.formulario = this.formBuilder.group({
@@ -48,7 +50,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
       // this.buscarProfissoes('SP', 'SÃOPAULO');
      // this.buscarEntidades('Advogado', 'SP', 'SÃOPAULO');
-     // this.buscarPlanos('CAASP', 'SP', 'SÃOPAULO', ['1987-09-16']);
+     this.buscarPlanos('CAASP', 'SP', 'SÃOPAULO', ['1987-09-16']);
       this.cidade.disable();
       this.profissao.disable();
       this.entidade.disable();
@@ -190,8 +192,22 @@ export class HomeComponent implements OnInit {
       return null;
   }
 
-  criar(){
+  formatDate(date: string) {
+      let separada = date.split('/');
+      let dia = separada[0];
+      let mes = separada[1];
+      let ano = separada[2];
 
+      return [ano, mes, dia].join('-');
+    }
+
+  criar(){
+      let dataFormatada = [];
+          dataFormatada.push(this.formatDate(this.formulario.controls['datanascimento'].value._i));
+      this.buscarPlanos(this.formulario.controls['entidade'].value.NomeFantasia, this.formulario.controls['estado'].value.sigla,
+          this.formulario.controls['cidade'].value.nome, ['1987-09-16']);
+        // console.log(this.formulario);
+        // console.log(dataFormatada);
   }
 
   private _filterEstado(name: string): any[] {
@@ -236,6 +252,7 @@ export class HomeComponent implements OnInit {
     }
 
     selectedEntidade(event: any) {
+      this.formValido = true;
       console.log(event.option.value);
     }
 

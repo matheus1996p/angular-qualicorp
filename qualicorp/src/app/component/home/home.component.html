@@ -83,6 +83,7 @@
                     </mat-autocomplete>
                     <mat-error *ngIf="entidade.invalid">{{getErrorMessageEntidade()}}</mat-error>
                 </mat-form-field>
+                <button style="width: 100%" type="submit" class="btn btn-success" [disabled]="!formValido || !formulario.valid" >Encontrar Planos</button>
             </form>
         </div>
     </div>
