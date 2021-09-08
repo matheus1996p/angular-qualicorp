@@ -53,14 +53,10 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      // this.buscarProfissoes('SP', 'SÃOPAULO');
-     // this.buscarEntidades('Advogado', 'SP', 'SÃOPAULO');
-     // this.buscarPlanos('CAASP', 'SP', 'SÃOPAULO', ['1987-09-16']);
       this.cidade.disable();
       this.profissao.disable();
       this.entidade.disable();
       this.buscarEstados();
-      // this.buscarCidades(35);
 
       this.filtrosUfs = this.estado.valueChanges
           .pipe(
@@ -96,7 +92,6 @@ export class HomeComponent implements OnInit {
           .subscribe((data: any) =>{
             this.profissoes = data;
             this.profissao.enable();
-            console.log(this.profissoes);
           })
   }
 
@@ -105,7 +100,6 @@ export class HomeComponent implements OnInit {
            .subscribe((data: any) =>{
               this.entidades = data;
               this.entidade.enable();
-              console.log(this.entidades);
            });
   }
 
@@ -116,7 +110,6 @@ export class HomeComponent implements OnInit {
                 this.transfereService.setData(this.planos);
                 this.router.navigateByUrl('/planos');
                 this.isLoading = false;
-                console.log(this.planos);
             })
   }
 
@@ -127,7 +120,6 @@ export class HomeComponent implements OnInit {
               this.ufs.sort(function (a,b) {
                   return a.nome < b.nome ? -1 : a.nome > b.nome ? 1 : 0;
               });
-              console.log(this.ufs);
           })
   }
 
@@ -136,7 +128,6 @@ export class HomeComponent implements OnInit {
           .subscribe((data:any) =>{
               this.cidades = data;
               this.cidade.enable();
-              console.log(this.cidades);
           })
   }
 
@@ -215,8 +206,6 @@ export class HomeComponent implements OnInit {
           dataFormatada.push(this.formatDate(this.formulario.controls['datanascimento'].value._i));
       this.buscarPlanos(this.formulario.controls['entidade'].value.NomeFantasia, this.formulario.controls['estado'].value.sigla,
           this.formulario.controls['cidade'].value.nome, ['1987-09-16']);
-        // console.log(this.formulario);
-        // console.log(dataFormatada);
   }
 
   private _filterEstado(name: string): any[] {
@@ -257,12 +246,10 @@ export class HomeComponent implements OnInit {
       this.entidade.disable();
       this.buscarEntidades(event.option.value.profissao, this.formulario.controls['estado'].value.sigla,
           this.formulario.controls['cidade'].value.nome);
-        console.log(event.option.value);
     }
 
     selectedEntidade(event: any) {
       this.formValido = true;
-      console.log(event.option.value);
     }
 
     displayFn(estado: any): string {
