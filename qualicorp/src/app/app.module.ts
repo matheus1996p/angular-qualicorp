@@ -21,6 +21,8 @@ import {
   MomentDateAdapter
 } from "@angular/material-moment-adapter";
 import 'moment/locale/pt-br';
+import { PlanosComponent } from './component/planos/planos.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 export const MY_FORMATS2 = {
   parse: {
@@ -37,7 +39,8 @@ export const MY_FORMATS2 = {
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    PlanosComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +56,8 @@ export const MY_FORMATS2 = {
     MatDatepickerModule,
     MatNativeDateModule,
     NgxMaskModule.forRoot(),
-    FormsModule
+    FormsModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},

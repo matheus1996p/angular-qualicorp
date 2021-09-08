@@ -1,4 +1,8 @@
-<div class="formulario">
+<div *ngIf="isLoading" class="loading">
+        <mat-spinner></mat-spinner>
+</div>
+
+<div [class.isLoading]="isLoading" class="formulario">
     <div class="header">
         <h2>Olá, seja bem vindo!</h2>
         <p>Vamos te ajudar a encontrar um plano de saúde que melhor atenda você, fazendo algumas perguntas. É rapidinho. ;)</p>

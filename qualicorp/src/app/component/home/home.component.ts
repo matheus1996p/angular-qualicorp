@@ -4,6 +4,8 @@ import {ApiService} from "../../services/api-service.service";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
 import * as moment from 'moment';
+import {TransfereService} from "../../services/transfere.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -33,9 +35,12 @@ export class HomeComponent implements OnInit {
   filtroEntidades!: Observable<any[]>;
 
   formValido: boolean = false;
+  isLoading: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
-              private apiService: ApiService) {
+              private transfereService:TransfereService,
+              private apiService: ApiService,
+              private router: Router) {
       this.formulario = this.formBuilder.group({
           nome: this.nome,
           email: this.email,
@@ -50,7 +55,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
       // this.buscarProfissoes('SP', 'SÃOPAULO');
      // this.buscarEntidades('Advogado', 'SP', 'SÃOPAULO');
-     this.buscarPlanos('CAASP', 'SP', 'SÃOPAULO', ['1987-09-16']);
+     // this.buscarPlanos('CAASP', 'SP', 'SÃOPAULO', ['1987-09-16']);
       this.cidade.disable();
       this.profissao.disable();
       this.entidade.disable();
@@ -108,6 +113,9 @@ export class HomeComponent implements OnInit {
         this.apiService.getPlanos(entidade, uf, cidade, datanascimento)
             .subscribe((data:any) =>{
                 this.planos = data;
+                this.transfereService.setData(this.planos);
+                this.router.navigateByUrl('/planos');
+                this.isLoading = false;
                 console.log(this.planos);
             })
   }
@@ -202,6 +210,7 @@ export class HomeComponent implements OnInit {
     }
 
   criar(){
+      this.isLoading = true;
       let dataFormatada = [];
           dataFormatada.push(this.formatDate(this.formulario.controls['datanascimento'].value._i));
       this.buscarPlanos(this.formulario.controls['entidade'].value.NomeFantasia, this.formulario.controls['estado'].value.sigla,

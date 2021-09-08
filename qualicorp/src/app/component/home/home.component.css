@@ -9,3 +9,17 @@
 .formulario .mat-form-field {
     width: 100%;
 }
+
+
+.loading {
+    position:relative;
+    left: 50%;
+    top:50%;
+    margin-left: -4em;
+    z-index: 999999999;
+}
+
+.isLoading {
+    opacity: 0.5;
+    pointer-events: none;
+}
